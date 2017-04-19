@@ -1,8 +1,6 @@
 const express = require('express')
 const app = express()
-const port = 3000
-
-// var Promise = require('bluebird');
+const port = process.env.PORT || 5000;
 
 app.use('/static', express.static('static'));
 app.use('/js', express.static('js'));
