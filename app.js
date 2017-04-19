@@ -2,6 +2,8 @@ const express = require('express')
 const app = express()
 const port = 3000
 
+// var Promise = require('bluebird');
+
 app.use('/static', express.static('static'));
 app.use('/js', express.static('js'));
 
