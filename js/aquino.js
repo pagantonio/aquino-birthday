@@ -1,24 +1,24 @@
 $(document).ready(function(){
 
-
-  var body = $('body');
-
-  body.load('/static/aquino-html.html', makeMagic);
+  $('#pageBody').load('/static/aquino-html.html', makeMagic);
 
   function makeMagic() {
+    $('#pageBody').append('<p id="message" style="color:#fff;font-size:40px;font-family:arial, sans-serif";></p>');
 
-    var elements = $('font');
+    var elements = document.querySelectorAll('font');
 
-    elements.each(function(i, e){
-  	 $(e).hide();
+    elements.forEach(function(e, i){
+      e.style.visibility = 'hidden';
     });
 
     elements = makeMatrix(elements, 70);
     Promise.all(drawAquino(elements)).then(function(){
-      $('body').append('<p id="message" style="color:#fff;font-size:40px;font-family:arial, sans-serif";></p>');
-      $('#message').typed({
+
+
+      var message = document.getElementById('message');
+      Typed.new('#message', {
         strings: ['PARABÉNS... ^1000 CRETINO!'],
-			  typeSpeed: 1
+        typeSpeed: 1
       });
     });
   }
@@ -44,21 +44,22 @@ $(document).ready(function(){
     return new Promise(resolve => setTimeout(resolve, ms));
   }
 
-  async function draw(items, interval) {
+  async function draw(items, initialSpeed, decreasingValue) {
       for (var j = 0; j < items.length; j++) {
         var font = items[j];
-        $(font).show();
-        await sleep(interval);
+        var sleepTime = initialSpeed - (j * decreasingValue)/2;
+        sleepTime = sleepTime <= decreasingValue ? decreasingValue : sleepTime;
+        font.style.visibility = 'visible';
+        await sleep(sleepTime);
       }
   }
 
   function drawAquino(elements) {
     var functions = [];
     for (var i = 0; i < elements.length; i++) {
-      functions[i] = draw(elements[i], 40);
+      functions[i] = draw(elements[i], 200, 20);
     }
 
     return functions;
   }
-
 });
